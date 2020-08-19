@@ -16,7 +16,6 @@ const TodoFormContainer = observer(() => {
     const classes = useStyles()
     const store = React.useContext(StoreContext)
     
-
     const handleAddTodo = () => {
         if(store.newContentTodo === '') {
             return

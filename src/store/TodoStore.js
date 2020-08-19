@@ -18,7 +18,6 @@ export default class TodoStore {
      * Fetches todos from the server
      */
     async loadTodos() {
-        console.log('loadTodos')
         this.isLoading = true
 
         const fetchedTodos = await this.transportLayer.fetchTodos(this.pageNumber)
@@ -61,6 +60,7 @@ export default class TodoStore {
     createTodo() {
         var todo = new Todo(this)
         this.todos.unshift(todo)
+
         return todo
     }
 
@@ -70,6 +70,8 @@ export default class TodoStore {
     removeTodo(todo) {
         this.todos.splice(this.todos.indexOf(todo), 1)
         todo.dispose()
+
+        this.loadTodos()
     }
 }
 

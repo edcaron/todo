@@ -66,7 +66,6 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
         )
     }
 
-    console.log('renderizou ' + todo._id)
     return (
         <Card className={classes.root}>
             <AppDialog 

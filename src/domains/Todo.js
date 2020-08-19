@@ -31,7 +31,6 @@ export default class Todo {
                 if (this.autoSave) {
                     const createdId = await this.store.transportLayer.saveTodo(json)
 
-                    console.log('criou ' + createdId)
                     if(createdId){
                         this._id = createdId
                     }
@@ -70,7 +69,6 @@ export default class Todo {
     }
 
     dispose() {
-        console.log('disposed')
         // clean up the observer
         this.saveHandler()
     }

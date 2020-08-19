@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback} from 'react'
+import React, {useEffect} from 'react'
 import TodoItem from './TodoItem'
 import { observer } from "mobx-react"
 import {StoreContext} from '../StoreContext'
@@ -21,7 +21,6 @@ const TodoListContainer = observer(() => {
 	}
 
 	useEffect(() => {		
-		console.log('useEffect' + store.pageNumber)
 		store.loadTodos()
 	}, [store.pageNumber])
 	
@@ -34,18 +33,17 @@ const TodoListContainer = observer(() => {
 	})	
 
 	const renderLoadMore = () => {
-		if(!store.hasMore){
-			return
+		if(store.hasMore){
+			return (
+				<Grid item xs={12}>
+					<Button
+						variant="contained"                                
+						onClick={handleLoadMore}>
+						Load more
+					</Button>
+				</Grid>
+			)
 		}
-		return (
-			<Grid item xs={12}>
-				<Button
-					variant="contained"                                
-					onClick={handleLoadMore}>
-					Load more
-				</Button>
-			</Grid>
-		)
 	}	
 	return (
 			<>
