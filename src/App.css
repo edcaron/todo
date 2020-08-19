@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  background: #f5f5f5;
+}
+
+.done{
+  font-style: italic;
+  text-decoration: line-through;
+}
+
+.task-container{
+  display: flex;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  box-shadow: black;
+}
