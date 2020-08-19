@@ -1,21 +1,17 @@
-import { observable, decorate, computed, action } from "mobx"
+import { observable, decorate } from "mobx"
 import Todo from '../domains/Todo.js'
 
-export class TodoStore {
+export default class TodoStore {
     transportLayer
     todos = []
     isLoading = true
 
     newContentTodo = ''
     pageNumber = 1
+    hasMore = false
 
     constructor(transportLayer) {
-        this.transportLayer = transportLayer // server request maker
-        // this.transportLayer.onReceiveTodoUpdate((updatedTodo) =>
-        //     this.updateTodoFromServer(updatedTodo)
-        // )
-
-        //this.loadTodos()
+        this.transportLayer = transportLayer //does server requests
     }
 
     /**
@@ -26,37 +22,41 @@ export class TodoStore {
         this.isLoading = true
 
         const fetchedTodos = await this.transportLayer.fetchTodos(this.pageNumber)
-        console.log(fetchedTodos.length)
-        fetchedTodos.forEach((json) => this.updateTodoFromServer(json))
+
+        this.updateTodos(fetchedTodos.data)
+
+        this.hasMore = fetchedTodos.hasMore
 
         this.isLoading = false
     }
 
     /**
-     * Update a todo with information from the server. Guarantees a todo
-     * only exists once. Might either construct a new todo, update an existing one,
-     * or remove a todo if it has been deleted on the server.
+     * fill the state with objects from array
      */
-    updateTodoFromServer(json) {
-        var todo = this.todos.find((todo) => todo._id === json._id)
+    updateTodos(array){
+        let newTodos = []
 
-        if (!todo) {
-            console.log('11__novo');
-            todo = new Todo(this, json._id)
-            this.todos.push(todo)
-        }
+        array.forEach((json) => {
+            let todo = this.todos.find((todo) => todo._id === json._id)
 
-        if (json.isDeleted) {
-            console.log('11__removido');
-            this.removeTodo(todo)
-        } else {
-            console.log('11__atualizado');
-            todo.updateFromJson(json)
-        }
+            if (!todo) {
+                todo = new Todo(this, json._id)
+                todo.updateFromJson(json)
+
+                newTodos.push(todo)
+            } 
+            else if (todo.isDeleted) {
+                this.removeTodo(todo)
+            } else {
+                todo.updateFromJson(todo)
+            }  
+        })
+
+        this.todos.replace(this.todos.concat(newTodos))
     }
 
     /**
-     * Creates a fresh todo on the client and server
+     * add new todo to list
      */
     createTodo() {
         var todo = new Todo(this)
@@ -65,35 +65,19 @@ export class TodoStore {
     }
 
     /**
-     * A todo was somehow deleted, clean it from the client memory
+     * when todo is deleted, clean it from the client memory
      */
     removeTodo(todo) {
         this.todos.splice(this.todos.indexOf(todo), 1)
         todo.dispose()
-    }
-
-    get getTodos() {
-        // console.log('getTodos')
-        // const limit = 5
-        // const page = (this.pageNumber) || 1
-        // let skip = (limit * (page - 1))
-
-        // if(skip > this.todos.length){
-        //     skip -= this.todos.length 
-        // }
-
-        // console.log(this.todos.length, skip, (skip + limit))
-        // return this.todos.slice(skip, (skip + limit))
     }
 }
 
 decorate(TodoStore, {
     todos: observable,
     isLoading:  observable,
+    hasMore:  observable,
     newContentTodo: observable,
-    pageNumber: observable,
-    getTodos: computed,
-    removeTodo: action,
-    createTodo: action
+    pageNumber: observable
   })
   

@@ -1,17 +1,9 @@
 import React from 'react'
 import AppDialog from './AppDialog.js'
-import { makeStyles } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import IconButton from '@material-ui/core/IconButton'
+import {makeStyles, Typography, Card, CardHeader, IconButton, Button, FormControlLabel, Checkbox, Tooltip} from '@material-ui/core'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import DeleteIcon from '@material-ui/icons/Delete'
-import Button from '@material-ui/core/Button'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Tooltip from '@material-ui/core/Tooltip';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import DoneIcon from '@material-ui/icons/Done';
-import { Typography } from '@material-ui/core'
+import DoneIcon from '@material-ui/icons/Done'
 import { observer } from "mobx-react"
 
 const useStyles = makeStyles(() => ({
@@ -51,6 +43,7 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
     }
 
     const renderLabel = () => {
+        const statusClassName = todo.completed ? classes.statusDone : classes.statusDefault
         return (
             <FormControlLabel 
                 control={
@@ -73,9 +66,7 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
         )
     }
 
-    let statusClassName = todo.completed ? classes.statusDone : classes.statusDefault;
-
-    console.log('renderizou ' + todo._id);
+    console.log('renderizou ' + todo._id)
     return (
         <Card className={classes.root}>
             <AppDialog 
@@ -92,16 +83,13 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
             />
             <CardHeader 
                 className={classes.cardHeader}
-                classes={{ avatar: classes.avatar }}
+                classes={{avatar: classes.avatar}}
                 avatar={renderLabel()}
                 action={
                     <Tooltip title="Delete">
-                        <IconButton   
-                                aria-label="settings"
-                                onClick={handleDeleteClick}
-                            >
+                        <IconButton onClick={handleDeleteClick}>
                             <DeleteIcon />
-                        </IconButton>
+                        </IconButton>   
                     </Tooltip>
                     }
                 />        

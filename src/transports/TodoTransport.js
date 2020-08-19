@@ -1,4 +1,4 @@
-const SERVER_URI = 'http://localhost:5000';
+const SERVER_URI = 'http://localhost:5000'
 
 export default class TodoTransport {
  
@@ -11,10 +11,10 @@ export default class TodoTransport {
         try {
             const api_call = await fetch(`${SERVER_URI}/todos/${pageNumber}`)
 
-            const data = await api_call.json();
-            console.log(data);
+            const data = await api_call.json()
+            console.log(data)
 
-            return data;
+            return data
         } catch (error) {
             console.error(error)   
             return []
@@ -32,9 +32,9 @@ export default class TodoTransport {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(json),
             })
-            const data =  await api_call.json();
+            const data =  await api_call.json()
 
-            // return data._id;
+            return data._id
         } catch (error) {
             console.error(error)   
             return false
@@ -49,10 +49,10 @@ export default class TodoTransport {
                 method: 'DELETE'
             })
 
-            const data = await api_call.json();
-            console.log(data);
+            const data = await api_call.json()
+            console.log(data)
 
-            return data;
+            return data
         } catch (error) {
             console.error(error)   
             return []

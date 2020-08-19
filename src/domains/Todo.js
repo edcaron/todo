@@ -16,11 +16,10 @@ export default class Todo {
 
     /**
      * Disposer for the side effect that automatically
-     * stores this Todo, see @dispose.
      */
     saveHandler = null
 
-    constructor(store, _id) {
+    constructor(store, _id = '') {
         this.store = store
         this._id = _id
 
@@ -32,8 +31,8 @@ export default class Todo {
                 if (this.autoSave) {
                     const createdId = await this.store.transportLayer.saveTodo(json)
 
-                    if(createdId)
-                    {
+                    console.log('criou ' + createdId)
+                    if(createdId){
                         this._id = createdId
                     }
                 }
@@ -64,14 +63,14 @@ export default class Todo {
      * Update this todo with information from the server
      */
     updateFromJson(json) {
-        // make sure our changes aren't sent back to the server
-        this.autoSave = false
+        this.autoSave = false // make sure our changes aren't sent back to the server
         this.completed = json.completed
         this.task = json.task
         this.autoSave = true
     }
 
     dispose() {
+        console.log('disposed')
         // clean up the observer
         this.saveHandler()
     }
