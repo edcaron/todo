@@ -3,7 +3,7 @@ import TodoItem from './TodoItem'
 import { observer } from "mobx-react"
 import {StoreContext} from '../StoreContext'
 import AppHeading from './AppHeading.js'
-import {Button, Grid} from '@material-ui/core'
+import {Button, Grid, Box} from '@material-ui/core'
 
 const TodoListContainer = observer(() => {
 	const store = React.useContext(StoreContext)
@@ -46,12 +46,12 @@ const TodoListContainer = observer(() => {
 		}
 	}	
 	return (
-			<>
+			<Box mb={20}>
 				<AppHeading text="My todos" />
 				{todosListItens}		
 
 				{renderLoadMore()}
-			</>
+			</Box>
 		)
 })
 
