@@ -1,24 +1,24 @@
-import React, {useEffect} from 'react'
-import TodoItem from './TodoItem'
+import React, {useEffect, useCallback} from 'react'
+import TodoItem from '../components/TodoItem'
 import { observer } from "mobx-react"
 import {StoreContext} from '../StoreContext'
-import AppHeading from './AppHeading.js'
+import AppHeading from '../components/AppHeading.js'
 import {Button, Grid, Box} from '@material-ui/core'
 
 const TodoListContainer = observer(() => {
 	const store = React.useContext(StoreContext)
 
-	const handleChange = (todo) => {
+	const handleChange = useCallback((todo) => {
 		todo.completed = !todo.completed
-	}
+	}, [])
 
-	const handleDelete = (todo) => {
+	const handleDelete = useCallback((todo) => {
         todo.delete()
-	}
+	}, [])
 
-	const handleLoadMore = () => {
+	const handleLoadMore = useCallback(() => {
 		store.pageNumber++
-	}
+	}, [store.pageNumber])
 
 	useEffect(() => {		
 		store.loadTodos()
@@ -32,7 +32,7 @@ const TodoListContainer = observer(() => {
 				handleDelete={handleDelete}/>
 	})	
 
-	const renderLoadMore = () => {
+	const renderLoadMore = useCallback(() => {
 		if(store.hasMore){
 			return (
 				<Grid item xs={12}>
@@ -44,7 +44,8 @@ const TodoListContainer = observer(() => {
 				</Grid>
 			)
 		}
-	}	
+	}, [store.hasMore, handleLoadMore])
+
 	return (
 			<Box mb={20}>
 				<AppHeading text="My todos" />

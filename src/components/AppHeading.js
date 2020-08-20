@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core'
 const useStyles = makeStyles(() => ({
     root: {
         marginTop: 20,
-        marginBottom: 10
+        fontSize: 17
     }
 }))
 
@@ -15,6 +15,7 @@ const AppHeading = ({text}) => {
     return (
         <Typography 
             component="h1"
+            variant="overline"
             className={classes.root}
         >
         {text}

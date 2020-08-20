@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import { observer } from "mobx-react"
-import AppHeading from './AppHeading'
+import AppHeading from '../components/AppHeading'
 import TodoForm from './TodoForm'
 import {StoreContext} from '../StoreContext'
 import {Grid, Card, Tooltip, Button, CardContent, makeStyles} from '@material-ui/core'
@@ -10,13 +10,14 @@ const useStyles = makeStyles(() => ({
     textRight: {
       textAlign: "right"
     },
-  }))
+}))
 
 const TodoFormContainer = observer(() => {
     const classes = useStyles()
     const store = React.useContext(StoreContext)
-    
-    const handleAddTodo = () => {
+    const newContentTodo = store.newContentTodo
+
+    const handleAddTodo = useCallback(() => {
         if(store.newContentTodo === '') {
             return
         }
@@ -24,30 +25,35 @@ const TodoFormContainer = observer(() => {
         let newTodo = store.createTodo()
         newTodo.task = store.newContentTodo
         store.newContentTodo = ''
-    }
+    }, [newContentTodo])
 
+    const handleSubmit = useCallback((event) =>{
+        event.preventDefault()
+         
+        handleAddTodo()
+    }, [handleAddTodo])   
+    
     return(
-        <div>
+        <>
             <AppHeading text="New todo" />
             <Card>
-                <CardContent>
-                    <Grid container spacing={4}>
-                        <TodoForm handleAddTodo={handleAddTodo}/>
+                <CardContent>                    
+                    <TodoForm handleSubmit={handleSubmit} >
                         <Grid item xs={4} md={2} className={classes.textRight}>
                             <Tooltip title="Add todo">
                                 <Button
                                     variant="contained"
-                                    color="primary"                                    
-                                    onClick={handleAddTodo}
+                                    color="primary"
+                                    type="submit"                                    
                                     startIcon={<AddIcon />}>
                                     Add
                                 </Button>
                             </Tooltip>
                         </Grid>
-                    </Grid>                
+                    </TodoForm>         
                 </CardContent>
             </Card>
-        </div>        
+        </>        
     )
 })
 

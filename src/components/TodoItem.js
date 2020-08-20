@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import AppDialog from './AppDialog.js'
 import {makeStyles, Typography, Card, CardHeader, IconButton, Button, FormControlLabel, Checkbox, Tooltip} from '@material-ui/core'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
@@ -8,24 +8,34 @@ import { observer } from "mobx-react"
 
 const useStyles = makeStyles(() => ({
     root: {
-        maxWidth: '100%',    
-        marginBottom: 10
+        maxWidth: "100%",    
+        marginBottom: 10,
+        "&:hover $action": {
+            opacity: "1",
+            visibility: "visible"
+        }
     },
     checkbox: {
         marginRight: 20
     },
     statusDefault: {},
     statusDone: {
-        fontStyle: 'italic',
-        textDecoration: 'line-through',
-        color: '#999'
+        fontStyle: "italic",
+        textDecoration: "line-through",
+        color: "#999"
     },
     avatar: {
         flexShrink: 1,
-        wordWrap: 'anywhere'
+        wordWrap: "anywhere"
     },
     cardHeader:{
         padding: "8px 16px"
+    },
+    action: {
+        marginTop: "0",
+        opacity: "0",
+        visibility: "hidden",
+        transition: 'visibility 0.25s, opacity 0.25s linear'
     }
 }))
 
@@ -34,13 +44,17 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
     
     const [open, setOpen] = React.useState(false)
 
-    const handleDeleteClick = () => {
+    const handleDeleteClick = useCallback(() => {
         setOpen(true)
-    }
+    }, [])
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setOpen(false)
-    }
+    }, [])
+
+    const handleCheckChange = useCallback(() => {
+        handleChange(todo)
+    }, [handleChange, todo])
 
     const renderLabel = () => {
         const statusClassName = todo.completed ? classes.statusDone : classes.statusDefault
@@ -51,7 +65,7 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
                         icon={<CheckBoxOutlineBlankIcon />}
                         checkedIcon={<DoneIcon />}
                         checked={todo.completed}
-                        onChange={() => handleChange(todo)}
+                        onChange={handleCheckChange}
                         color="primary"
                     />
                 }
@@ -82,7 +96,7 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
             />
             <CardHeader 
                 className={classes.cardHeader}
-                classes={{avatar: classes.avatar}}
+                classes={{avatar: classes.avatar, action: classes.action}}
                 avatar={renderLabel()}
                 action={
                     <Tooltip title="Delete">
@@ -90,7 +104,7 @@ const TodoItem = observer(({todo, handleChange, handleDelete}) => {
                             <DeleteIcon />
                         </IconButton>   
                     </Tooltip>
-                    }
+                }
                 />        
         </Card>
     )

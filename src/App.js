@@ -1,7 +1,7 @@
 import React from 'react'
 import NavBar from './components/NavBar'
-import TodoListContainer from './components/TodoListContainer'
-import TodoFormContainer from './components/TodoFormContainer'
+import TodoListContainer from './pages/TodoListContainer'
+import TodoFormContainer from './pages/TodoFormContainer'
 import Container from '@material-ui/core/Container'
 import {StoreProvider} from './StoreContext'
 
